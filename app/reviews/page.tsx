@@ -1,4 +1,5 @@
-﻿"use client"
+"use client"
+import { Suspense } from "react"
 import { useEffect, useState } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import SideMenu from "@/components/SideMenu"
@@ -22,7 +23,7 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
   )
 }
 
-export default function ReviewsPage() {
+function ReviewsPageInner() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const { t, lang } = useLang()
@@ -189,5 +190,12 @@ export default function ReviewsPage() {
         )}
       </div>
     </main>
+  )
+}
+export default function ReviewsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Загрузка...</div>}>
+      <ReviewsPageInner />
+    </Suspense>
   )
 }

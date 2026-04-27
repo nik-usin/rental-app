@@ -1,4 +1,5 @@
-﻿"use client"
+"use client"
+import { Suspense } from "react"
 import { useEffect, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import SideMenu from "@/components/SideMenu"
@@ -25,7 +26,7 @@ function getDaysCount(start: string, end: string) {
   return Math.ceil(diff / (1000 * 60 * 60 * 24))
 }
 
-export default function BookingPage() {
+function BookingPageInner() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const studioId = Number(searchParams.get("studio") || 1)
@@ -260,5 +261,13 @@ export default function BookingPage() {
         </div>
       </div>
     </main>
+  )
+}
+
+export default function BookingPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Загрузка...</div>}>
+      <BookingPageInner />
+    </Suspense>
   )
 }
