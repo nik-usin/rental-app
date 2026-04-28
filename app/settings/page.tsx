@@ -1,4 +1,4 @@
-п»ї"use client"
+"use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { useTheme } from "next-themes"
@@ -6,16 +6,16 @@ import SideMenu from "@/components/SideMenu"
 import { useLang } from "@/components/LangProvider"
 
 const languages = [
-  { code: "ru", label: "рџ‡·рџ‡є Р СѓСЃСЃРєРёР№" },
-  { code: "en", label: "рџ‡¬рџ‡§ English" },
-  { code: "de", label: "рџ‡©рџ‡Є Deutsch" },
-  { code: "fr", label: "рџ‡«рџ‡· FranГ§ais" },
-  { code: "zh", label: "рџ‡Ёрџ‡і дё­ж–‡" },
-  { code: "ar", label: "рџ‡ёрџ‡¦ Ш§Щ„Ш№Ш±ШЁЩЉШ©" },
-  { code: "es", label: "рџ‡Єрџ‡ё EspaГ±ol" },
-  { code: "tr", label: "рџ‡№рџ‡· TГјrkГ§e" },
-  { code: "kk", label: "рџ‡°рџ‡ї ТљР°Р·Р°Т›С€Р°" },
-  { code: "uz", label: "рџ‡єрџ‡ї O'\''zbek" },
+  { code: "ru", label: "???? Русский" },
+  { code: "en", label: "???? English" },
+  { code: "de", label: "???? Deutsch" },
+  { code: "fr", label: "???? Francais" },
+  { code: "zh", label: "???? ??" },
+  { code: "ar", label: "???? ???????" },
+  { code: "es", label: "???? Espanol" },
+  { code: "tr", label: "???? Turkce" },
+  { code: "kk", label: "???? ?аза?ша" },
+  { code: "uz", label: "???? O'\''zbek" },
 ]
 
 export default function SettingsPage() {
@@ -60,18 +60,18 @@ export default function SettingsPage() {
     const result = await Notification.requestPermission()
     setNotifPermission(result)
     if (result === "granted") {
-      new Notification("РљРІР°СЂС‚РёСЂР°РЎСѓС‚РѕРє", {
-        body: lang === "ru" ? "РЈРІРµРґРѕРјР»РµРЅРёСЏ РІРєР»СЋС‡РµРЅС‹!" : "Notifications enabled!",
+      new Notification("КвартираСуток", {
+        body: lang === "ru" ? "Уведомления включены!" : "Notifications enabled!",
         icon: "/favicon.ico",
       })
     }
   }
 
   const notifItems = lang === "ru" ? [
-    { key: "booking_created", label: "РЎРѕР·РґР°РЅРёРµ Р±СЂРѕРЅРёСЂРѕРІР°РЅРёСЏ", desc: "РџСЂРё СѓСЃРїРµС€РЅРѕРј Р±СЂРѕРЅРёСЂРѕРІР°РЅРёРё" },
-    { key: "booking_cancelled", label: "РћС‚РјРµРЅР° Р±СЂРѕРЅРёСЂРѕРІР°РЅРёСЏ", desc: "РџСЂРё РѕС‚РјРµРЅРµ Р±СЂРѕРЅРё" },
-    { key: "checkin_reminder", label: "РќР°РїРѕРјРёРЅР°РЅРёРµ Рѕ Р·Р°СЃРµР»РµРЅРёРё", desc: "Р—Р° РґРµРЅСЊ РґРѕ Р·Р°РµР·РґР°" },
-    { key: "checkout_reminder", label: "РќР°РїРѕРјРёРЅР°РЅРёРµ Рѕ РІС‹СЃРµР»РµРЅРёРё", desc: "Р—Р° РґРµРЅСЊ РґРѕ РІС‹РµР·РґР°" },
+    { key: "booking_created", label: "Создание бронирования", desc: "При успешном бронировании" },
+    { key: "booking_cancelled", label: "Отмена бронирования", desc: "При отмене брони" },
+    { key: "checkin_reminder", label: "Напоминание о заселении", desc: "За день до заезда" },
+    { key: "checkout_reminder", label: "Напоминание о выселении", desc: "За день до выезда" },
   ] : [
     { key: "booking_created", label: "Booking created", desc: "When booking is successful" },
     { key: "booking_cancelled", label: "Booking cancelled", desc: "When booking is cancelled" },
@@ -80,9 +80,9 @@ export default function SettingsPage() {
   ]
 
   const themeItems = [
-    { value: "light", label: "вЂпёЏ", name: t("settings.light"), desc: lang === "ru" ? "Р’СЃРµРіРґР° СЃРІРµС‚Р»Р°СЏ" : "Always light" },
-    { value: "dark", label: "рџЊ™", name: t("settings.dark"), desc: lang === "ru" ? "Р’СЃРµРіРґР° С‚С‘РјРЅР°СЏ" : "Always dark" },
-    { value: "system", label: "рџ’»", name: t("settings.system"), desc: lang === "ru" ? "РљР°Рє РЅР° СѓСЃС‚СЂРѕР№СЃС‚РІРµ" : "Match device" },
+    { value: "light", label: "??", name: t("settings.light"), desc: lang === "ru" ? "Всегда светлая" : "Always light" },
+    { value: "dark", label: "??", name: t("settings.dark"), desc: lang === "ru" ? "Всегда тёмная" : "Always dark" },
+    { value: "system", label: "??", name: t("settings.system"), desc: lang === "ru" ? "Как на устройстве" : "Match device" },
   ]
 
   if (!mounted) return null
@@ -92,20 +92,20 @@ export default function SettingsPage() {
       <header className="bg-white dark:bg-gray-900 shadow-sm px-6 py-4 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
-          <a href="/" className="text-xl font-bold text-blue-600">РљРІР°СЂС‚РёСЂР°РЎСѓС‚РѕРє</a>
+          <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
         </div>
-        <a href="/profile" className="text-gray-600 hover:text-blue-600 text-sm">в†ђ {t("auth.back")}</a>
+        <a href="/profile" className="text-gray-600 hover:text-blue-600 text-sm">< {t("auth.back")}</a>
       </header>
 
       <div className="max-w-2xl mx-auto py-10 px-6 flex flex-col gap-6">
         <h1 className="text-2xl font-bold text-gray-800 dark:text-white">{t("settings.title")}</h1>
 
-        {saved && <div className="bg-green-50 text-green-700 px-4 py-3 rounded-lg text-sm">вњ… {t("settings.saved")}</div>}
+        {saved && <div className="bg-green-50 text-green-700 px-4 py-3 rounded-lg text-sm">? {t("settings.saved")}</div>}
 
-        {/* РўРµРјР° */}
+        {/* Тема */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">рџЋЁ</span>
+            <span className="text-2xl">??</span>
             <div>
               <h2 className="text-lg font-bold text-gray-800 dark:text-white">{t("settings.theme_title")}</h2>
               <p className="text-gray-400 text-sm">{t("settings.theme_subtitle")}</p>
@@ -126,10 +126,10 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* РЈРІРµРґРѕРјР»РµРЅРёСЏ */}
+        {/* Уведомления */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-4">
-            <span className="text-2xl">рџ””</span>
+            <span className="text-2xl">??</span>
             <div>
               <h2 className="text-lg font-bold text-gray-800 dark:text-white">{t("settings.notif_title")}</h2>
               <p className="text-gray-400 text-sm">{t("settings.notif_subtitle")}</p>
@@ -137,11 +137,11 @@ export default function SettingsPage() {
           </div>
           {notifPermission !== "granted" && (
             <button onClick={requestNotifPermission} className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 mb-4 text-sm">
-              рџ”” {t("settings.allow_notif")}
+              ?? {t("settings.allow_notif")}
             </button>
           )}
-          {notifPermission === "granted" && <div className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm mb-4">вњ… {lang === "ru" ? "РЈРІРµРґРѕРјР»РµРЅРёСЏ СЂР°Р·СЂРµС€РµРЅС‹" : "Notifications enabled"}</div>}
-          {notifPermission === "denied" && <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm mb-4">вќЊ {lang === "ru" ? "РЈРІРµРґРѕРјР»РµРЅРёСЏ Р·Р°Р±Р»РѕРєРёСЂРѕРІР°РЅС‹" : "Notifications blocked"}</div>}
+          {notifPermission === "granted" && <div className="bg-green-50 text-green-700 px-3 py-2 rounded-lg text-sm mb-4">? {lang === "ru" ? "Уведомления разрешены" : "Notifications enabled"}</div>}
+          {notifPermission === "denied" && <div className="bg-red-50 text-red-600 px-3 py-2 rounded-lg text-sm mb-4">? {lang === "ru" ? "Уведомления заблокированы" : "Notifications blocked"}</div>}
           <div className="flex flex-col gap-4">
             {notifItems.map(n => (
               <div key={n.key} className="flex items-center justify-between py-3 border-b border-gray-50 dark:border-gray-800 last:border-0">
@@ -161,10 +161,10 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* РЇР·С‹Рє */}
+        {/* Язык */}
         <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-sm p-6">
           <div className="flex items-center gap-3 mb-6">
-            <span className="text-2xl">рџЊђ</span>
+            <span className="text-2xl">??</span>
             <div>
               <h2 className="text-lg font-bold text-gray-800 dark:text-white">{t("settings.lang_title")}</h2>
               <p className="text-gray-400 text-sm">{t("settings.lang_subtitle")}</p>
