@@ -33,7 +33,7 @@ export default function ComplexPage() {
 
   const studios = [
     { name: lang === "ru" ? "Студия № 1" : "Studio #1", area: lang === "ru" ? "От 23 м²" : "From 23 m²", id: 1, photo: "/studios/studio1/__1_01.jpg" },
-    { name: lang === "ru" ? "Студия № 2" : "Studio #2", area: lang === "ru" ? "От 20 м²" : "From 20 m²", id: 2, photo: "/studios/studio2/__1_01.jpg" },
+    { name: lang === "ru" ? "Студия № 2" : "Studio #2", area: lang === "ru" ? "От 20 м²" : "From 20 m²", id: 2, photo: "/studios/studio2/__2_01.jpg" },
     { name: lang === "ru" ? "Студия № 3" : "Studio #3", area: lang === "ru" ? "От 26 м²" : "From 26 m²", id: 3, photo: "/studios/studio3/__3_01.jpg" },
   ]
 

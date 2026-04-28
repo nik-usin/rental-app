@@ -19,7 +19,7 @@ const statusColors: Record<string, string> = {
 
 const studioCovers: Record<number, string> = {
   1: "/studios/studio1/__1_01.jpg",
-  2: "/studios/studio2/__1_01.jpg",
+  2: "/studios/studio2/__2_01.jpg",
   3: "/studios/studio3/__3_01.jpg",
 }
 
