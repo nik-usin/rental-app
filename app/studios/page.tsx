@@ -53,7 +53,7 @@ export default function StudiosPage() {
           <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
         </div>
         <div className="flex gap-4 items-center">
-          <a href="/profile" className="text-gray-600 hover:text-blue-600 text-sm">Привет, {user?.name}!</a>
+          <a href="/profile" className="bg-blue-600 text-white hover:bg-blue-700 text-sm px-3 py-1.5 rounded-lg font-medium transition">👤 {user?.name}</a>
           <button onClick={handleLogout} className="text-gray-500 hover:text-red-500 text-sm">Выйти</button>
         </div>
       </header>
