@@ -13,7 +13,7 @@ export default function PaymentPage() {
           <SideMenu />
           <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
         </div>
-        <a href="/studios" className="text-gray-600 hover:text-blue-600 text-sm">< {lang === "ru" ? "Назад" : "Back"}</a>
+        <a href="/studios" className="text-gray-600 hover:text-blue-600 text-sm">← {lang === "ru" ? "Назад" : "Back"}</a>
       </header>
 
       <div className="max-w-2xl mx-auto py-10 px-6 flex flex-col gap-6">
