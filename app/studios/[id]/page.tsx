@@ -163,11 +163,11 @@ export default function StudioPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
           <div>
             <p className="text-gray-500 text-sm mb-2">Как дойти до дома</p>
-            <video controls className="w-full rounded-xl" src="/videos/kak-doyti.mp4" />
+            <video controls className="w-full rounded-xl" src="https://rzkpvdqrfsbkzpobangr.supabase.co/storage/v1/object/public/videos/2Kak-Doyti.mp4" />
           </div>
           <div>
             <p className="text-gray-500 text-sm mb-2">Как зайти в подъезд</p>
-            <video controls className="w-full rounded-xl" src="/videos/kak-zayti.mp4" />
+            <video controls className="w-full rounded-xl" src="https://rzkpvdqrfsbkzpobangr.supabase.co/storage/v1/object/public/videos/Kak-Zayti.mp4" />
           </div>
         </div>
 
