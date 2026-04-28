@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useState, useRef, useEffect } from "react"
 
 const faqs = [
@@ -114,7 +114,7 @@ export default function ChatBot() {
           </div>
 
           {/* Быстрые вопросы */}
-          {messages.length <= 1 && (
+          {true && (
             <div className="px-4 pb-2 flex flex-wrap gap-2">
               {quickQuestions.map((q, i) => (
                 <button key={i} onClick={() => sendMessage(q)} className="bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400 text-xs px-3 py-1.5 rounded-full hover:bg-blue-100 transition">
