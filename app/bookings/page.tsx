@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { supabase } from "@/lib/supabase"
@@ -83,7 +83,7 @@ export default function MyBookingsPage() {
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
           <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>

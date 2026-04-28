@@ -17,7 +17,7 @@ function StarRating({ value, onChange }: { value: number; onChange?: (v: number)
           onMouseEnter={() => onChange && setHover(star)}
           onMouseLeave={() => onChange && setHover(0)}
           className={`text-2xl transition ${(hover || value) >= star ? "text-yellow-400" : "text-gray-300"} ${!onChange ? "cursor-default" : "cursor-pointer"}`}
-        >★</button>
+        >в…</button>
       ))}
     </div>
   )
@@ -30,9 +30,9 @@ function ReviewsPageInner() {
   const studioId = Number(searchParams.get("studio") || 1)
 
   const studioNames: Record<number, string> = {
-    1: lang === "ru" ? "Студия 1 — Уютная" : "Studio 1 — Cozy",
-    2: lang === "ru" ? "Студия 2 — Современная" : "Studio 2 — Modern",
-    3: lang === "ru" ? "Студия 3 — Премиум" : "Studio 3 — Premium",
+    1: lang === "ru" ? "РЎС‚СѓРґРёСЏ 1 вЂ” РЈСЋС‚РЅР°СЏ" : "Studio 1 вЂ” Cozy",
+    2: lang === "ru" ? "РЎС‚СѓРґРёСЏ 2 вЂ” РЎРѕРІСЂРµРјРµРЅРЅР°СЏ" : "Studio 2 вЂ” Modern",
+    3: lang === "ru" ? "РЎС‚СѓРґРёСЏ 3 вЂ” РџСЂРµРјРёСѓРј" : "Studio 3 вЂ” Premium",
   }
 
   const [user, setUser] = useState<any>(null)
@@ -61,7 +61,7 @@ function ReviewsPageInner() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!user) { router.push("/auth/login"); return }
-    if (!form.text.trim()) { setError(lang === "ru" ? "Напишите текст отзыва" : "Please write a review"); return }
+    if (!form.text.trim()) { setError(lang === "ru" ? "РќР°РїРёС€РёС‚Рµ С‚РµРєСЃС‚ РѕС‚Р·С‹РІР°" : "Please write a review"); return }
     setSubmitting(true); setError(""); setSuccess("")
     const res = await fetch("/api/reviews", {
       method: "POST",
@@ -71,7 +71,7 @@ function ReviewsPageInner() {
     const data = await res.json()
     setSubmitting(false)
     if (!res.ok) { setError(data.error); return }
-    setSuccess(lang === "ru" ? "Отзыв опубликован! Спасибо!" : "Review published! Thank you!")
+    setSuccess(lang === "ru" ? "РћС‚Р·С‹РІ РѕРїСѓР±Р»РёРєРѕРІР°РЅ! РЎРїР°СЃРёР±Рѕ!" : "Review published! Thank you!")
     setForm({ rating: 5, text: "" })
     fetchReviews(activeStudio)
   }
@@ -85,22 +85,22 @@ function ReviewsPageInner() {
 
   const reviewWord = (n: number) => {
     if (lang === "en") return n === 1 ? "review" : "reviews"
-    return n === 1 ? "отзыв" : n < 5 ? "отзыва" : "отзывов"
+    return n === 1 ? "РѕС‚Р·С‹РІ" : n < 5 ? "РѕС‚Р·С‹РІР°" : "РѕС‚Р·С‹РІРѕРІ"
   }
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
-          <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
+          <a href="/" className="text-xl font-bold text-blue-600">РљРІР°СЂС‚РёСЂР°РЎСѓС‚РѕРє</a>
         </div>
-        <a href={"/studios/" + activeStudio} className="text-gray-600 hover:text-blue-600 text-sm">← {t("studios.back")}</a>
+        <a href={"/studios/" + activeStudio} className="text-gray-600 hover:text-blue-600 text-sm">в†ђ {t("studios.back")}</a>
       </header>
 
       <div className="max-w-3xl mx-auto py-10 px-6">
 
-        {/* Фильтр по студиям */}
+        {/* Р¤РёР»СЊС‚СЂ РїРѕ СЃС‚СѓРґРёСЏРј */}
         <div className="flex gap-2 mb-6 flex-wrap">
           {[
             { id: 0, label: t("reviews.all_studios") },
@@ -118,7 +118,7 @@ function ReviewsPageInner() {
           ))}
         </div>
 
-        {/* Заголовок */}
+        {/* Р—Р°РіРѕР»РѕРІРѕРє */}
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-1">{t("reviews.title")}</h1>
           <p className="text-gray-500 mb-4">{studioNames[activeStudio] || t("reviews.all_studios")}</p>
@@ -131,16 +131,16 @@ function ReviewsPageInner() {
               </div>
             </div>
           ) : (
-            <p className="text-gray-400">{lang === "ru" ? "Отзывов пока нет — будьте первым!" : "No reviews yet — be the first!"}</p>
+            <p className="text-gray-400">{lang === "ru" ? "РћС‚Р·С‹РІРѕРІ РїРѕРєР° РЅРµС‚ вЂ” Р±СѓРґСЊС‚Рµ РїРµСЂРІС‹Рј!" : "No reviews yet вЂ” be the first!"}</p>
           )}
         </div>
 
-        {/* Форма */}
+        {/* Р¤РѕСЂРјР° */}
         <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-bold text-gray-800 mb-4">{t("reviews.add_review")}</h2>
           {!user ? (
             <div>
-              <p className="text-gray-500 text-sm mb-3">{lang === "ru" ? "Для написания отзыва необходимо войти в аккаунт" : "You need to sign in to leave a review"}</p>
+              <p className="text-gray-500 text-sm mb-3">{lang === "ru" ? "Р”Р»СЏ РЅР°РїРёСЃР°РЅРёСЏ РѕС‚Р·С‹РІР° РЅРµРѕР±С…РѕРґРёРјРѕ РІРѕР№С‚Рё РІ Р°РєРєР°СѓРЅС‚" : "You need to sign in to leave a review"}</p>
               <a href="/auth/login" className="bg-blue-600 text-white px-6 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 inline-block">{t("auth.login_btn")}</a>
             </div>
           ) : (
@@ -161,15 +161,15 @@ function ReviewsPageInner() {
               {error && <div className="bg-red-50 text-red-600 px-4 py-3 rounded-lg text-sm">{error}</div>}
               {success && <div className="bg-green-50 text-green-700 px-4 py-3 rounded-lg text-sm">{success}</div>}
               <button type="submit" disabled={submitting} className="bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50">
-                {submitting ? (lang === "ru" ? "Публикация..." : "Publishing...") : t("reviews.submit_btn")}
+                {submitting ? (lang === "ru" ? "РџСѓР±Р»РёРєР°С†РёСЏ..." : "Publishing...") : t("reviews.submit_btn")}
               </button>
             </form>
           )}
         </div>
 
-        {/* Список отзывов */}
+        {/* РЎРїРёСЃРѕРє РѕС‚Р·С‹РІРѕРІ */}
         {loading ? (
-          <div className="text-center text-gray-400 py-8">{lang === "ru" ? "Загрузка..." : "Loading..."}</div>
+          <div className="text-center text-gray-400 py-8">{lang === "ru" ? "Р—Р°РіСЂСѓР·РєР°..." : "Loading..."}</div>
         ) : reviews.length === 0 ? (
           <div className="bg-white rounded-2xl shadow-sm p-8 text-center text-gray-400">{t("reviews.empty")}</div>
         ) : (
@@ -178,7 +178,7 @@ function ReviewsPageInner() {
               <div key={r.id} className="bg-white rounded-2xl shadow-sm p-6">
                 <div className="flex justify-between items-start mb-3">
                   <div>
-                    <p className="font-semibold text-gray-800">{r.users?.name || (lang === "ru" ? "Гость" : "Guest")}</p>
+                    <p className="font-semibold text-gray-800">{r.users?.name || (lang === "ru" ? "Р“РѕСЃС‚СЊ" : "Guest")}</p>
                     <p className="text-gray-400 text-xs mt-0.5">{formatDate(r.created_at)}</p>
                   </div>
                   <StarRating value={r.rating} />
@@ -194,7 +194,7 @@ function ReviewsPageInner() {
 }
 export default function ReviewsPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Загрузка...</div>}>
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center text-gray-400">Р—Р°РіСЂСѓР·РєР°...</div>}>
       <ReviewsPageInner />
     </Suspense>
   )

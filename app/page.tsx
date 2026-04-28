@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useEffect, useState } from "react"
 import Link from "next/link"
 import { FaTelegramPlane, FaWhatsapp } from "react-icons/fa"
@@ -22,7 +22,7 @@ export default function Home() {
 
   return (
     <main className="min-h-screen bg-white flex flex-col">
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
           <span className="text-xl font-bold text-blue-600">КвартираСуток</span>

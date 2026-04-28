@@ -8,25 +8,25 @@ export default function ContactsPage() {
 
   return (
     <main className="min-h-screen bg-white flex flex-col">
-      <header className="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
-          <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
+          <a href="/" className="text-xl font-bold text-blue-600">РљРІР°СЂС‚РёСЂР°РЎСѓС‚РѕРє</a>
         </div>
         <a href="/studios" className="text-gray-600 hover:text-blue-600 text-sm">{t("nav.studios")}</a>
       </header>
 
       <section className="bg-gray-900 text-white py-20 px-6 text-center">
-        <p className="text-blue-400 uppercase tracking-widest text-sm font-semibold mb-3">{lang === "ru" ? "Студии «На холмах»" : "Na Holmah Studios"}</p>
+        <p className="text-blue-400 uppercase tracking-widest text-sm font-semibold mb-3">{lang === "ru" ? "РЎС‚СѓРґРёРё В«РќР° С…РѕР»РјР°С…В»" : "Na Holmah Studios"}</p>
         <h1 className="text-4xl md:text-5xl font-bold mb-4">{t("contacts.title")}</h1>
-        <p className="text-gray-300 text-lg max-w-xl mx-auto">{lang === "ru" ? "Если у Вас есть вопросы, Вы можете обратиться к нам" : "If you have any questions, feel free to contact us"}</p>
+        <p className="text-gray-300 text-lg max-w-xl mx-auto">{lang === "ru" ? "Р•СЃР»Рё Сѓ Р’Р°СЃ РµСЃС‚СЊ РІРѕРїСЂРѕСЃС‹, Р’С‹ РјРѕР¶РµС‚Рµ РѕР±СЂР°С‚РёС‚СЊСЃСЏ Рє РЅР°Рј" : "If you have any questions, feel free to contact us"}</p>
       </section>
 
       <section className="max-w-3xl mx-auto py-16 px-6 w-full">
         <div className="bg-gray-50 rounded-2xl p-8 border border-gray-100 mb-6">
           <div className="flex items-center gap-3 mb-6">
             <span className="text-2xl">??</span>
-            <h2 className="text-xl font-bold text-gray-800">{lang === "ru" ? "Наши телефоны" : "Our phones"}</h2>
+            <h2 className="text-xl font-bold text-gray-800">{lang === "ru" ? "РќР°С€Рё С‚РµР»РµС„РѕРЅС‹" : "Our phones"}</h2>
           </div>
           <div className="flex flex-col sm:flex-row gap-4">
             <a href="tel:+79262343017" className="flex items-center gap-3 bg-white rounded-xl px-6 py-4 shadow-sm border border-gray-100 hover:border-blue-300 hover:shadow-md transition flex-1">
@@ -60,8 +60,8 @@ export default function ContactsPage() {
             <span className="text-2xl">??</span>
             <h2 className="text-xl font-bold text-gray-800">{t("contacts.address")}</h2>
           </div>
-          <p className="text-gray-600">{lang === "ru" ? "ЖК «Изумрудные холмы», г. Красногорск" : "Izumrudnye Holmy Complex, Krasnogorsk"}</p>
-          <p className="text-gray-400 text-sm mt-1">{lang === "ru" ? "Остановка Карбышева — 5 минут пешком" : "Karbysheva stop — 5 minutes walk"}</p>
+          <p className="text-gray-600">{lang === "ru" ? "Р–Рљ В«РР·СѓРјСЂСѓРґРЅС‹Рµ С…РѕР»РјС‹В», Рі. РљСЂР°СЃРЅРѕРіРѕСЂСЃРє" : "Izumrudnye Holmy Complex, Krasnogorsk"}</p>
+          <p className="text-gray-400 text-sm mt-1">{lang === "ru" ? "РћСЃС‚Р°РЅРѕРІРєР° РљР°СЂР±С‹С€РµРІР° вЂ” 5 РјРёРЅСѓС‚ РїРµС€РєРѕРј" : "Karbysheva stop вЂ” 5 minutes walk"}</p>
         </div>
       </section>
     </main>
