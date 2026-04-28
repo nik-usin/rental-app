@@ -144,7 +144,7 @@ export default function SettingsPage() {
                   disabled={notifPermission !== "granted"}
                   className={`relative w-12 h-6 rounded-full transition-colors duration-200 disabled:opacity-40 ${notifications[n.key as keyof typeof notifications] && notifPermission === "granted" ? "bg-blue-600" : "bg-gray-300"}`}
                 >
-                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${notifications[n.key as keyof typeof notifications] && notifPermission === "granted" ? "translate-x-7" : "translate-x-1"}`} />
+                  <span className={`absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200 ${notifications[n.key as keyof typeof notifications] && notifPermission === "granted" ? "translate-x-1" : "translate-x-7"}`} />
                 </button>
               </div>
             ))}
