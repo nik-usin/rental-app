@@ -1,106 +1,199 @@
 "use client"
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import { useRouter } from "next/navigation"
+import { useParams } from "next/navigation"
 import SideMenu from "@/components/SideMenu"
 
-const studios = [
-  { id: 1, name: "Студия 1 — Уютная", price: "5 000 / сутки", cover: "/studios/studio1/__1_20.jpg" },
-  { id: 2, name: "Студия 2 — Современная", price: "6 500 / сутки", cover: "/studios/studio2/__2_15.jpg" },
-  { id: 3, name: "Студия 3 — Премиум", price: "9 000 / сутки", cover: "/studios/studio3/__3_15.jpg" },
+const studiosData = [
+  {
+    id: 1,
+    name: "Студия 1 — Уютная",
+    price: "5 000 / сутки",
+    area: "23 м²",
+    floor: "2 из 25",
+    guests: "До 3 гостей",
+    features: ["🛋 Диван-кровать", "🛏 Раскладной пуфик", "📺 Wink", "🍳 Варочная панель", "🌐 Wi-Fi", "❄️ Холодильник", "👕 Стиральная машина", "📦 Микроволновка", "🔑 Электронный замок", "🛗 Лифт"],
+    description: "Уютная дизайнерская студия в новом ЖК ждёт своих гостей. Для бесконтактного самостоятельного заселения в любое время суток на двери установлен электронный кодовый замок. Квартира укомплектована всей необходимой для проживания мебелью и техникой. Рядом с домом в пешей доступности расположены супермаркеты, аптеки, кафе и рестораны, большое количество учебных заведений. В пешей доступности от дома расположен лесопарк «Изумрудные холмы». Подходит для семьи с ребёнком, есть дополнительное раскладное спальное место.",
+    extra: "Цена указана за 2 гостей. Доплата за каждого доп. гостя — 1 000 ₽/сутки. При бронировании от 10 суток — скидки.",
+    beds: "1 двуспальный диван-кровать + 1 раскладной пуфик (80×190 см)",
+    photos: Array.from({length: 28}, (_, i) => `/studios/studio1/__1_${String(i+1).padStart(2,"00")}.jpg`),
+  },
+  {
+    id: 2,
+    name: "Студия 2 — Современная",
+    price: "6 500 / сутки",
+    area: "20 м²",
+    floor: "2 из 25",
+    guests: "До 2 гостей",
+    features: ["🛏 Откидная кровать", "📺 Wink", "🍳 Варочная панель", "🌐 Wi-Fi", "❄️ Холодильник", "👕 Стиральная машина", "📦 Микроволновка", "🔑 Электронный замок", "🛗 Лифт"],
+    description: "Уютная дизайнерская студия в новом ЖК ждёт своих гостей. Для бесконтактного самостоятельного заселения в любое время суток на двери установлен электронный кодовый замок. Студия укомплектована всей необходимой для проживания мебелью и техникой. Рядом с домом расположены супермаркеты, аптеки, кафе и рестораны. Совсем рядом расположен лесопарк «Изумрудные холмы». Также в пешей доступности госпиталь на улице Светлая.",
+    extra: "Цена указана за 2 гостей. При бронировании от 10 суток — скидки.",
+    beds: "1 откидная двуспальная кровать",
+    photos: Array.from({length: 28}, (_, i) => `/studios/studio2/__2_${String(i+1).padStart(2,"00")}.jpg`),
+  },
+  {
+    id: 3,
+    name: "Студия 3 — Премиум",
+    price: "9 000 / сутки",
+    area: "26 м²",
+    floor: "2 из 25",
+    guests: "До 4 гостей",
+    features: ["🛏 Двуспальная кровать", "🛋 Диван-кровать", "📺 Wink", "🍳 Варочная панель", "🌐 Wi-Fi", "❄️ Холодильник", "👕 Стиральная машина", "📦 Микроволновка", "🔑 Электронный замок", "🛗 Лифт"],
+    description: "Уютная дизайнерская квартира в новом ЖК ждёт своих гостей. 1 спальня + кухонная зона. Для бесконтактного самостоятельного заселения в любое время суток на двери установлен электронный кодовый замок. Студия укомплектована всей необходимой для проживания мебелью и техникой. Рядом с домом расположены супермаркеты, аптеки, кафе и рестораны, большое количество учебных заведений. Совсем рядом лесопарк «Изумрудные холмы». Также в пешей доступности госпиталь на улице Светлая.",
+    extra: "Цена указана за 2 гостей. Доплата за каждого доп. гостя — 1 000 ₽/сутки. При бронировании от 10 суток — скидки.",
+    beds: "1 двуспальная кровать + 1 двуспальный диван-кровать",
+    photos: Array.from({length: 29}, (_, i) => `/studios/studio3/__3_${String(i+1).padStart(2,"00")}.jpg`),
+  },
 ]
 
-const rules = [
-  { icon: "🕒", title: "Время заезда и выезда", text: "Заезд с 14:00. Выезд до 12:00. Ранний заезд и поздний выезд — по согласованию." },
-  { icon: "🧼", title: "Чистота и порядок", text: "Передаём студию в чистом виде. Перед выездом вынесите мусор в баки рядом с домом. Закройте окна и выключите электроприборы." },
-  { icon: "🚭", title: "Курение запрещено", text: "Курение внутри строго запрещено. Разрешено только на улице или на балконе (слева от лифта). Штраф за курение — от 3 000 руб." },
-  { icon: "🐾", title: "Домашние животные", text: "Проживание с питомцами только по предварительному согласованию. Владелец отвечает за чистоту и сохранность имущества." },
-  { icon: "🔇", title: "Тихие часы", text: "С 22:00 до 08:00 — режим тишины. Вечеринки запрещены. Уважайте соседей и других гостей." },
-  { icon: "🛋", title: "Бережное отношение", text: "Пользуйтесь имуществом аккуратно. Если что-то сломали — сообщите нам. Утеря ключей или повреждение оборудования — штраф." },
-  { icon: "🔐", title: "Безопасность", text: "Не оставляйте открытыми двери и окна. Выключайте все приборы при уходе. Не передавайте ключи третьим лицам." },
-  { icon: "👥", title: "Посетители", text: "Проживают только лица, указанные при бронировании. Все гости обязаны предоставить документы. Вечеринки не допускаются." },
-  { icon: "🌐", title: "Wi-Fi и техника", text: "Бесплатный Wi-Fi — пароль при заселении. Не меняйте настройки роутера. При неполадках — сообщите нам." },
-  { icon: "⚠️", title: "Ответственность", text: "Грубое нарушение правил — досрочное выселение без возврата оплаты. Все повреждения оплачиваются по стоимости ремонта или замены." },
-]
+function Gallery({ photos }: { photos: string[] }) {
+  const [current, setCurrent] = useState(0)
+  const [showAll, setShowAll] = useState(false)
+  const visiblePhotos = showAll ? photos : photos.slice(0, 9)
 
-export default function StudiosPage() {
-  const router = useRouter()
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") setCurrent(i => (i - 1 + photos.length) % photos.length)
+      if (e.key === "ArrowRight") setCurrent(i => (i + 1) % photos.length)
+    }
+    window.addEventListener("keydown", handler)
+    return () => window.removeEventListener("keydown", handler)
+  }, [photos.length])
+
+  return (
+    <div className="mb-10">
+      <div className="relative bg-gray-900 rounded-2xl overflow-hidden" style={{height: "480px"}}>
+        <Image src={photos[current]} alt={"Фото " + (current+1)} fill className="object-contain" />
+        <button onClick={() => setCurrent(i => (i - 1 + photos.length) % photos.length)} className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg transition">‹</button>
+        <button onClick={() => setCurrent(i => (i + 1) % photos.length)} className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/40 hover:bg-black/60 text-white w-10 h-10 rounded-full flex items-center justify-center text-lg transition">›</button>
+        <div className="absolute bottom-4 left-0 right-0 flex justify-center gap-1.5 flex-wrap px-4">
+          {photos.map((_, i) => (
+            <button key={i} onClick={() => setCurrent(i)} className={`w-2 h-2 rounded-full transition ${i === current ? "bg-white" : "bg-white/40"}`} />
+          ))}
+        </div>
+        <div className="absolute top-4 right-4 bg-black/50 text-white text-xs px-3 py-1 rounded-full">{current + 1} / {photos.length}</div>
+      </div>
+      <div className="flex gap-2 mt-3 overflow-x-auto pb-2">
+        {visiblePhotos.map((photo, i) => (
+          <button key={i} onClick={() => setCurrent(i)} className={`relative flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition ${i === current ? "border-blue-500" : "border-transparent"}`}>
+            <Image src={photo} alt={"Миниатюра " + (i+1)} fill className="object-cover" loading="lazy" />
+          </button>
+        ))}
+        {!showAll && photos.length > 9 && (
+          <button onClick={() => setShowAll(true)} className="flex-shrink-0 w-16 h-16 rounded-lg border-2 border-gray-200 bg-gray-50 flex items-center justify-center text-xs text-gray-500 hover:bg-gray-100 transition">
+            +{photos.length - 9}
+          </button>
+        )}
+      </div>
+    </div>
+  )
+}
+
+export default function StudioPage() {
+  const params = useParams()
   const [user, setUser] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
+  const [studioPrice, setStudioPrice] = useState<number | null>(null)
+  const studio = studiosData.find(s => s.id === Number(params.id))
 
   useEffect(() => {
     const saved = localStorage.getItem("user")
-    if (saved) {
-      setUser(JSON.parse(saved))
-    } else {
-      router.push("/auth/login")
-    }
-    setLoading(false)
+    if (saved) setUser(JSON.parse(saved))
+    if (studio) fetchPrice(studio.id)
   }, [])
 
-  const handleLogout = () => {
-    localStorage.removeItem("user")
-    router.push("/")
+  const fetchPrice = async (id: number) => {
+    const res = await fetch(`/api/studios/${id}`)
+    if (res.ok) {
+      const data = await res.json()
+      setStudioPrice(data.price)
+    }
   }
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-400">Загрузка...</div>
+  if (!studio) return <div className="p-8 text-center text-gray-500">Студия не найдена</div>
+
+  const displayPrice = studioPrice ? `${studioPrice.toLocaleString("ru-RU")} / сутки` : studio.price
 
   return (
     <main className="min-h-screen bg-gray-50">
-      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 sticky top-0 z-50 flex justify-between items-center">
+      <header className="bg-white shadow-sm px-6 py-4 sticky top-0 z-50 flex justify-between items-center">
         <div className="flex items-center gap-4">
           <SideMenu />
           <a href="/" className="text-xl font-bold text-blue-600">КвартираСуток</a>
         </div>
-        <div className="flex gap-4 items-center">
-          <a href="/profile" className="text-gray-600 hover:text-blue-600 text-sm">Привет, {user?.name}!</a>
-          <button onClick={handleLogout} className="text-gray-500 hover:text-red-500 text-sm">Выйти</button>
-        </div>
+        <a href="/studios" className="text-gray-600 hover:text-blue-600">Назад к студиям</a>
       </header>
 
-      <section className="max-w-5xl mx-auto py-12 px-6">
-        <h1 className="text-3xl font-bold text-gray-800 mb-2">Наши студии</h1>
-        <p className="text-gray-500 mb-8">Выберите студию и забронируйте онлайн</p>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {studios.map((studio) => (
-            <a key={studio.id} href={"/studios/" + studio.id} className="bg-white rounded-2xl shadow-sm overflow-hidden hover:shadow-md transition">
-              <div className="relative h-48">
-                <Image src={studio.cover} alt={studio.name} fill className="object-cover" />
-              </div>
-              <div className="p-5">
-                <h2 className="font-bold text-gray-800 text-lg mb-2">{studio.name}</h2>
-                <p className="text-blue-600 font-semibold">{studio.price}</p>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      <section className="max-w-5xl mx-auto pb-16 px-6">
-        <div className="border-2 border-blue-100 rounded-2xl p-8 bg-white shadow-sm">
-          <div className="flex items-center gap-3 mb-8">
-            <span className="text-3xl">📋</span>
+      <section className="max-w-4xl mx-auto py-10 px-6">
+        <div className="bg-white rounded-2xl shadow-sm p-6 mb-6">
+          <div className="flex flex-col md:flex-row md:justify-between gap-4 mb-4">
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">Правила проживания</h2>
-              <p className="text-gray-500 text-sm">Просим вас ознакомиться перед заселением</p>
+              <h1 className="text-3xl font-bold text-gray-800 mb-1">{studio.name}</h1>
+              <p className="text-blue-600 font-semibold text-2xl mb-3">{displayPrice} ₽</p>
+              <div className="flex flex-wrap gap-2 mb-4">
+                {[
+                  { icon: "📐", label: studio.area },
+                  { icon: "🏢", label: "Этаж " + studio.floor },
+                  { icon: "👥", label: studio.guests },
+                  { icon: "🛏", label: studio.beds },
+                ].map((item, i) => (
+                  <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2">
+                    <span>{item.icon}</span>
+                    <span className="text-gray-700 text-sm">{item.label}</span>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {rules.map((rule, i) => (
-              <div key={i} className="flex items-start gap-3 bg-gray-50 rounded-xl p-4 border border-gray-100">
-                <span className="text-2xl mt-0.5">{rule.icon}</span>
-                <div>
-                  <h3 className="font-semibold text-gray-800 mb-1">{rule.title}</h3>
-                  <p className="text-gray-600 text-sm leading-relaxed">{rule.text}</p>
-                </div>
-              </div>
-            ))}
+          <p className="text-gray-600 leading-relaxed mb-4">{studio.description}</p>
+          <div className="bg-blue-50 dark:bg-blue-900/30 rounded-xl px-4 py-3 text-blue-800 dark:text-blue-200 text-sm mb-4">{studio.extra}</div>
+          <div>
+            <p className="text-sm text-gray-500 mb-2 font-medium">Удобства:</p>
+            <div className="flex flex-wrap gap-2">
+              {studio.features.map((f, i) => (
+                <span key={i} className="bg-gray-100 text-gray-700 text-sm px-3 py-1 rounded-full">{f}</span>
+              ))}
+            </div>
           </div>
-          <div className="bg-yellow-50 border border-yellow-200 rounded-xl p-5">
-            <p className="text-yellow-800 text-sm font-semibold mb-1">📞 Связь с нами</p>
-            <p className="text-yellow-700 text-sm">Если возникли вопросы, пожелания или проблемы — мы всегда готовы помочь!</p>
-            <p className="text-yellow-700 text-sm mt-2 font-medium">Благодарим за выбор наших студий! Желаем приятного проживания! 💛</p>
+        </div>
+
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Фотографии</h2>
+        <Gallery photos={studio.photos} />
+
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Как добраться</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+          <div>
+            <p className="text-gray-500 text-sm mb-2">Как дойти до дома</p>
+            <video controls className="w-full rounded-xl" src="https://rzkpvdqrfsbkzpobangr.supabase.co/storage/v1/object/public/videos/2Kak-Doyti.mp4" />
           </div>
+          <div>
+            <p className="text-gray-500 text-sm mb-2">Как зайти в подъезд</p>
+            <video controls className="w-full rounded-xl" src="https://rzkpvdqrfsbkzpobangr.supabase.co/storage/v1/object/public/videos/Kak-Zayti.mp4" />
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 shadow-sm mb-6">
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Забронировать</h2>
+          <p className="text-gray-500 text-sm mb-4">Выберите даты и оформите заявку онлайн</p>
+          {user ? (
+            <a href={"/booking?studio=" + studio.id} className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 inline-block">
+              Выбрать даты и забронировать
+            </a>
+          ) : (
+            <div>
+              <p className="text-gray-500 text-sm mb-3">Для бронирования необходимо войти в аккаунт</p>
+              <a href="/auth/login" className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 inline-block">
+                Войти и забронировать
+              </a>
+            </div>
+          )}
+        </div>
+
+        <div className="bg-white rounded-2xl p-6 shadow-sm">
+          <h2 className="text-xl font-bold text-gray-800 mb-2">Отзывы гостей</h2>
+          <p className="text-gray-500 text-sm mb-4">Читайте отзывы и делитесь своим опытом</p>
+          <a href={"/reviews?studio=" + studio.id} className="bg-gray-800 text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-900 inline-block">
+            Читать отзывы
+          </a>
         </div>
       </section>
     </main>
