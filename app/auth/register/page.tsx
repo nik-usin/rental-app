@@ -1,4 +1,4 @@
-﻿"use client"
+"use client"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 
@@ -55,19 +55,19 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div>
             <label className="text-sm text-gray-600 mb-1 block">Имя</label>
-            <input type="text" placeholder="Ваше имя" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
+            <input type="text" placeholder="Ваше имя" autoComplete="name" required value={form.name} onChange={e => setForm({...form, name: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
           </div>
           <div>
             <label className="text-sm text-gray-600 mb-1 block">Телефон</label>
-            <input type="tel" placeholder="+7 000 000 00 00" required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
+            <input type="tel" placeholder="+7 000 000 00 00" autoComplete="tel" required value={form.phone} onChange={e => setForm({...form, phone: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
           </div>
           <div>
             <label className="text-sm text-gray-600 mb-1 block">Email</label>
-            <input type="email" placeholder="your@email.com" required value={form.email} onChange={e => setForm({...form, email: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
+            <input type="email" placeholder="your@email.com" autoComplete="email" required value={form.email} onChange={e => setForm({...form, email: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
           </div>
           <div>
             <label className="text-sm text-gray-600 mb-1 block">Пароль</label>
-            <input type="password" placeholder="Минимум 6 символов" required value={form.password} onChange={e => setForm({...form, password: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
+            <input type="password" placeholder="Минимум 6 символов" autoComplete="new-password" required value={form.password} onChange={e => setForm({...form, password: e.target.value})} className="w-full border border-gray-300 rounded-lg px-4 py-2 text-sm text-gray-900 placeholder-gray-400 focus:outline-none focus:border-blue-400" />
           </div>
           <button type="submit" disabled={loading} className="bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 mt-2 disabled:opacity-50">
             {loading ? "Загрузка..." : "Зарегистрироваться"}
