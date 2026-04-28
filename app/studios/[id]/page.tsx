@@ -6,7 +6,7 @@ import SideMenu from "@/components/SideMenu"
 
 const studios = [
   { id: 1, name: "Студия 1 — Уютная", price: "5 000 / сутки", cover: "/studios/studio1/__1_20.jpg" },
-  { id: 2, name: "Студия 2 — Современная", price: "6 500 / сутки", cover: "/studios/studio2/__1_15.jpg" },
+  { id: 2, name: "Студия 2 — Современная", price: "6 500 / сутки", cover: "/studios/studio2/__2_15.jpg" },
   { id: 3, name: "Студия 3 — Премиум", price: "9 000 / сутки", cover: "/studios/studio3/__3_15.jpg" },
 ]
 
