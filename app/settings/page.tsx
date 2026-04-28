@@ -18,10 +18,10 @@ export default function SettingsPage() {
   const [mounted, setMounted] = useState(false)
   const [notifPermission, setNotifPermission] = useState<string>("default")
   const [notifications, setNotifications] = useState({
-    booking_created: true,
-    booking_cancelled: true,
-    checkin_reminder: true,
-    checkout_reminder: true,
+    booking_created: false,
+    booking_cancelled: false,
+    checkin_reminder: false,
+    checkout_reminder: false,
   })
   const [saved, setSaved] = useState(false)
 
