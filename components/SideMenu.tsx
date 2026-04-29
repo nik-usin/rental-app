@@ -22,6 +22,8 @@ export default function SideMenu() {
     { href: "/profile", label: "👤 Личный кабинет" },
     { href: "/bookings", label: "📅 Мои бронирования" },
     { href: "/payment", label: "💳 Оплата" },
+    { href: "/chat", label: "🤖 Чат-помощник" },
+    { href: "/chat-support", label: "💬 Написать нам" },
   ]
 
   const openChat = () => {
