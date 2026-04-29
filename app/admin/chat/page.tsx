@@ -15,15 +15,22 @@ type Message = {
   users?: { name: string; email: string }
 }
 
+type ChatUser = {
+  id: number
+  name: string
+  email: string
+}
+
 export default function AdminChatPage() {
   const router = useRouter()
   const [messages, setMessages] = useState<Message[]>([])
-  const [users, setUsers] = useState<any[]>([])
-  const [selectedUser, setSelectedUser] = useState<any>(null)
+  const [allUsers, setAllUsers] = useState<ChatUser[]>([])
+  const [selectedUser, setSelectedUser] = useState<ChatUser | null>(null)
   const [input, setInput] = useState("")
   const [editingId, setEditingId] = useState<number | null>(null)
   const [editText, setEditText] = useState("")
   const [loading, setLoading] = useState(true)
+  const [search, setSearch] = useState("")
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -31,13 +38,11 @@ export default function AdminChatPage() {
     if (!saved) { router.push("/auth/login"); return }
     const u = JSON.parse(saved)
     if (u.role !== "admin") { router.push("/"); return }
-    fetchAllMessages()
+    fetchData()
 
     const channel = supabase
       .channel("admin-messages")
-      .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, () => {
-        fetchAllMessages()
-      })
+      .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, () => fetchData())
       .subscribe()
 
     return () => { supabase.removeChannel(channel) }
@@ -47,19 +52,15 @@ export default function AdminChatPage() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [selectedUser, messages])
 
-  const fetchAllMessages = async () => {
-    const res = await fetch("/api/messages?all=true")
-    const data = await res.json()
-    const allMessages: Message[] = data.messages || []
-    setMessages(allMessages)
-
-    const userMap = new Map()
-    allMessages.forEach(m => {
-      if (m.users && !userMap.has(m.user_id)) {
-        userMap.set(m.user_id, { id: m.user_id, name: m.users.name, email: m.users.email })
-      }
-    })
-    setUsers(Array.from(userMap.values()))
+  const fetchData = async () => {
+    const [msgsRes, usersRes] = await Promise.all([
+      fetch("/api/messages?all=true"),
+      fetch("/api/users")
+    ])
+    const msgsData = await msgsRes.json()
+    const usersData = await usersRes.json()
+    setMessages(msgsData.messages || [])
+    setAllUsers(usersData.users || [])
     setLoading(false)
   }
 
@@ -70,9 +71,8 @@ export default function AdminChatPage() {
     return msgs[msgs.length - 1]
   }
 
-  const getUnreadCount = (userId: number) => {
-    return messages.filter(m => m.user_id === userId && m.sender === "user" && !m.is_read).length
-  }
+  const getUnreadCount = (userId: number) =>
+    messages.filter(m => m.user_id === userId && m.sender === "user" && !m.is_read).length
 
   const sendMessage = async () => {
     if (!input.trim() || !selectedUser) return
@@ -82,6 +82,7 @@ export default function AdminChatPage() {
       body: JSON.stringify({ user_id: selectedUser.id, text: input, sender: "admin" })
     })
     setInput("")
+    fetchData()
   }
 
   const editMessage = async (id: number) => {
@@ -93,6 +94,7 @@ export default function AdminChatPage() {
     })
     setEditingId(null)
     setEditText("")
+    fetchData()
   }
 
   const deleteMessage = async (id: number) => {
@@ -102,9 +104,15 @@ export default function AdminChatPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id })
     })
+    fetchData()
   }
 
   const formatTime = (str: string) => new Date(str).toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" })
+
+  const filteredUsers = allUsers.filter(u =>
+    u.name.toLowerCase().includes(search.toLowerCase()) ||
+    u.email.toLowerCase().includes(search.toLowerCase())
+  )
 
   if (loading) return <div className="min-h-screen flex items-center justify-center text-gray-400">Загрузка...</div>
 
@@ -121,19 +129,24 @@ export default function AdminChatPage() {
       <div className="max-w-5xl mx-auto w-full px-4 py-6" style={{height: "calc(100vh - 73px)"}}>
         <div className="bg-white rounded-2xl shadow-sm flex overflow-hidden" style={{height: "100%"}}>
 
+          {/* Список пользователей */}
           <div className="w-80 border-r border-gray-100 flex flex-col">
             <div className="px-4 py-4 border-b border-gray-100">
-              <h2 className="font-bold text-gray-800">💬 Чаты</h2>
-              <p className="text-gray-400 text-xs mt-1">{users.length} пользователей</p>
+              <h2 className="font-bold text-gray-800 mb-3">💬 Чаты ({allUsers.length})</h2>
+              <input
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+                placeholder="Поиск клиента..."
+                className="w-full bg-gray-100 rounded-xl px-3 py-2 text-sm focus:outline-none"
+              />
             </div>
             <div className="flex-1 overflow-y-auto">
-              {users.length === 0 && (
+              {filteredUsers.length === 0 && (
                 <div className="text-center text-gray-400 py-8 px-4">
-                  <p className="text-3xl mb-2">💬</p>
-                  <p className="text-sm">Сообщений пока нет</p>
+                  <p className="text-sm">Клиентов не найдено</p>
                 </div>
               )}
-              {users.map(u => {
+              {filteredUsers.map(u => {
                 const last = getLastMessage(u.id)
                 const unread = getUnreadCount(u.id)
                 return (
@@ -142,7 +155,7 @@ export default function AdminChatPage() {
                     onClick={() => setSelectedUser(u)}
                     className={`w-full px-4 py-3 flex items-center gap-3 hover:bg-gray-50 transition border-b border-gray-50 ${selectedUser?.id === u.id ? "bg-blue-50" : ""}`}
                   >
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 flex-shrink-0 text-sm">
                       {u.name?.[0]?.toUpperCase()}
                     </div>
                     <div className="flex-1 text-left min-w-0">
@@ -152,7 +165,10 @@ export default function AdminChatPage() {
                           <span className="bg-blue-600 text-white text-xs w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0">{unread}</span>
                         )}
                       </div>
-                      {last && <p className="text-gray-400 text-xs truncate mt-0.5">{last.sender === "admin" ? "Вы: " : ""}{last.text}</p>}
+                      {last
+                        ? <p className="text-gray-400 text-xs truncate mt-0.5">{last.sender === "admin" ? "Вы: " : ""}{last.text}</p>
+                        : <p className="text-gray-300 text-xs mt-0.5">Нет сообщений</p>
+                      }
                     </div>
                   </button>
                 )
@@ -160,19 +176,20 @@ export default function AdminChatPage() {
             </div>
           </div>
 
+          {/* Чат */}
           <div className="flex-1 flex flex-col">
             {!selectedUser ? (
               <div className="flex-1 flex items-center justify-center text-gray-400">
                 <div className="text-center">
                   <p className="text-5xl mb-4">💬</p>
-                  <p className="font-medium">Выберите чат</p>
+                  <p className="font-medium">Выберите клиента</p>
                   <p className="text-sm mt-1">Нажмите на пользователя слева</p>
                 </div>
               </div>
             ) : (
               <>
                 <div className="px-6 py-4 border-b border-gray-100 flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600">
+                  <div className="w-9 h-9 rounded-full bg-blue-100 flex items-center justify-center font-bold text-blue-600 text-sm">
                     {selectedUser.name?.[0]?.toUpperCase()}
                   </div>
                   <div>
@@ -184,7 +201,8 @@ export default function AdminChatPage() {
                 <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col gap-3">
                   {userMessages.length === 0 && (
                     <div className="text-center text-gray-400 py-8">
-                      <p className="text-sm">Нет сообщений</p>
+                      <p className="text-3xl mb-2">💬</p>
+                      <p className="text-sm">Начните диалог с {selectedUser.name}</p>
                     </div>
                   )}
                   {userMessages.map(msg => (
@@ -228,7 +246,7 @@ export default function AdminChatPage() {
                     value={input}
                     onChange={e => setInput(e.target.value)}
                     onKeyDown={e => e.key === "Enter" && sendMessage()}
-                    placeholder={`Ответить ${selectedUser.name}...`}
+                    placeholder={`Написать ${selectedUser.name}...`}
                     className="flex-1 bg-gray-100 rounded-xl px-4 py-2 text-sm focus:outline-none"
                   />
                   <button onClick={sendMessage} className="bg-blue-600 text-white w-10 h-10 rounded-xl hover:bg-blue-700 transition flex items-center justify-center">
