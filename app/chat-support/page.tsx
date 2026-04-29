@@ -23,22 +23,31 @@ export default function ChatSupportPage() {
   const [editText, setEditText] = useState("")
   const [loading, setLoading] = useState(true)
   const bottomRef = useRef<HTMLDivElement>(null)
+  const userIdRef = useRef<number | null>(null)
 
   useEffect(() => {
     const saved = localStorage.getItem("user")
     if (!saved) { router.push("/auth/login"); return }
     const u = JSON.parse(saved)
     setUser(u)
+    userIdRef.current = u.id
     fetchMessages(u.id)
 
+    const interval = setInterval(() => {
+      if (userIdRef.current) fetchMessages(userIdRef.current)
+    }, 3000)
+
     const channel = supabase
-      .channel("messages")
+      .channel("messages-user")
       .on("postgres_changes", { event: "*", schema: "public", table: "messages" }, () => {
-        fetchMessages(u.id)
+        if (userIdRef.current) fetchMessages(userIdRef.current)
       })
       .subscribe()
 
-    return () => { supabase.removeChannel(channel) }
+    return () => {
+      supabase.removeChannel(channel)
+      clearInterval(interval)
+    }
   }, [])
 
   useEffect(() => {
@@ -53,17 +62,19 @@ export default function ChatSupportPage() {
   }
 
   const sendMessage = async () => {
-    if (!input.trim()) return
+    if (!input.trim() || !user) return
+    const text = input
+    setInput("")
     await fetch("/api/messages", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ user_id: user.id, text: input, sender: "user" })
+      body: JSON.stringify({ user_id: user.id, text, sender: "user" })
     })
-    setInput("")
+    fetchMessages(user.id)
   }
 
   const editMessage = async (id: number) => {
-    if (!editText.trim()) return
+    if (!editText.trim() || !user) return
     await fetch("/api/messages", {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
@@ -71,15 +82,17 @@ export default function ChatSupportPage() {
     })
     setEditingId(null)
     setEditText("")
+    fetchMessages(user.id)
   }
 
   const deleteMessage = async (id: number) => {
-    if (!confirm("Удалить сообщение?")) return
+    if (!confirm("Удалить сообщение?") || !user) return
     await fetch("/api/messages", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id })
     })
+    fetchMessages(user.id)
   }
 
   const formatTime = (str: string) => new Date(str).toLocaleTimeString("ru", { hour: "2-digit", minute: "2-digit" })
